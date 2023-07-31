@@ -66,7 +66,6 @@ public class ChiTietSanPhamController {
     @Autowired
     CameraService cameraService;
 
-
     private Date ngay;
 
     @GetMapping("/hien-thi")
