@@ -80,13 +80,17 @@ public class BanHangTaiQuayController {
 
     @PostMapping("/add-hoa-don")
     public String addHoaDon(Model model, @ModelAttribute("hoaDon") HoaDon hoaDon) {
+        List<HoaDon> list = hoaDonService.find();
+        if (list.size() >= 3) {
+            model.addAttribute("thongBaoHoaDon", "Đã quá số lượng hóa đơn chờ");
+            model.addAttribute("listHoaDon", list);
+            return "ban-hang/hien-thi";
+        }
         HoaDon hd = new HoaDon();
         hd.setMa("HD" + String.valueOf(hoaDonService.findAll().size() + 1));
         hd.setTinhTrang(0);
         hd.setNgayTao(Date.valueOf(LocalDate.now()));
         hoaDonService.add(hd);
-        hoaDonnn = hd;
-        model.addAttribute("hoaDon", hoaDonnn);
         return "redirect:/ban-hang/hien-thi";
     }
 
@@ -95,7 +99,7 @@ public class BanHangTaiQuayController {
         HoaDon hd = hoaDonService.findById(id);
         model.addAttribute("hoaDon", hd);
         hoaDonnn = hd;
-        List<HoaDon> list = hoaDonService.findAll();
+        List<HoaDon> list = hoaDonService.find();
         model.addAttribute("listHoaDon", list);
         List<HoaDonChiTiet> listHDCT = hoaDonChiTietService.getHoaDonChiTiet(hd.getId());
         model.addAttribute("listHoaDonChiTiet", listHDCT);
@@ -108,7 +112,7 @@ public class BanHangTaiQuayController {
                                   @PathVariable("id") UUID id) {
         if (hoaDonnn.getMa() == null) {
             model.addAttribute("thongBao", "Chưa chọn hóa đơn");
-            List<HoaDon> list = hoaDonService.findAll();
+            List<HoaDon> list = hoaDonService.find();
             model.addAttribute("listHoaDon", list);
         }
         model.addAttribute("hoaDon", hoaDonnn);
@@ -117,18 +121,18 @@ public class BanHangTaiQuayController {
 
     }
 
-    @GetMapping("/thay-doi-trang-thai/{id}")
-    public String updateTrangThai(Model model, @ModelAttribute("hoaDon") HoaDon hoaDon, @PathVariable("id") UUID id) {
-        HoaDon hd = hoaDonService.findById(id);
-        LocalDate ngayCapNhat = LocalDate.now();
-        if (hd.getTinhTrang() == 0) {
-            hoaDonService.update(id, 1, Date.valueOf(ngayCapNhat));
-            return "redirect:/ban-hang/hien-thi";
-        } else {
-            hoaDonService.update(id, 0, Date.valueOf(ngayCapNhat));
-            return "redirect:/ban-hang/hien-thi";
-        }
-    }
+//    @GetMapping("/thay-doi-trang-thai/{id}")
+//    public String updateTrangThai(Model model, @ModelAttribute("hoaDon") HoaDon hoaDon, @PathVariable("id") UUID id) {
+//        HoaDon hd = hoaDonService.findById(id);
+//        LocalDate ngayCapNhat = LocalDate.now();
+//        if (hd.getTinhTrang() == 0) {
+//            hoaDonService.update(id, 1, Date.valueOf(ngayCapNhat));
+//            return "redirect:/ban-hang/hien-thi";
+//        } else {
+//            hoaDonService.update(id, 0, Date.valueOf(ngayCapNhat));
+//            return "redirect:/ban-hang/hien-thi";
+//        }
+//    }
 
     @PostMapping("search-san-pham")
     public String search(Model model, @RequestParam("search-san-pham") String search,
@@ -136,13 +140,13 @@ public class BanHangTaiQuayController {
     ) {
         if (search.isEmpty()) {
             model.addAttribute("thongBao", "Không để trống thông tin");
-            List<HoaDon> list = hoaDonService.findAll();
+            List<HoaDon> list = hoaDonService.find();
             model.addAttribute("listHoaDon", list);
             return "ban-hang/hien-thi";
         } else {
             List<ChiTietSanPham> listCT = chiTietSanPhamService.search(search);
             model.addAttribute("listChiTietSanPham", listCT);
-            List<HoaDon> list = hoaDonService.findAll();
+            List<HoaDon> list = hoaDonService.find();
             model.addAttribute("listHoaDon", list);
             return "ban-hang/hien-thi";
         }
@@ -151,11 +155,11 @@ public class BanHangTaiQuayController {
     @ResponseBody
     @GetMapping("search-imei")
     public List<IMEI> searchIMEI(Model model, @RequestParam("search-imei") String search,
-                           @ModelAttribute("hoaDon") HoaDon hoaDon) {
+                                 @ModelAttribute("hoaDon") HoaDon hoaDon) {
 //        if (search.isEmpty()) {
 //            model.addAttribute("thongBaoIMEI", "Không để trống thông tin");
 //            model.addAttribute("hoaDon", hoaDonnn);
-//            List<HoaDon> list = hoaDonService.findAll();
+//            List<HoaDon> list = hoaDonService.find();
 //            model.addAttribute("listHoaDon", list);
 //            return l;
 //        } else {}
@@ -163,7 +167,7 @@ public class BanHangTaiQuayController {
         System.out.println(listIMEI);
         model.addAttribute("hoaDon", hoaDonnn);
         model.addAttribute("listImei", listIMEI);
-        List<HoaDon> list = hoaDonService.findAll();
+        List<HoaDon> list = hoaDonService.find();
         model.addAttribute("listHoaDon", list);
         return listIMEI;
 
@@ -172,6 +176,13 @@ public class BanHangTaiQuayController {
     @GetMapping("/them-imei/{id}")
     public String addIMEI(Model model, @PathVariable("id") UUID id,
                           @ModelAttribute("hoaDon") HoaDon hoaDon) {
+//        if(hoaDonnn.getMa().isEmpty()){
+//            model.addAttribute("thongBaoImei","Chưa chọn hóa đơn");
+//            model.addAttribute("hoaDon", hoaDonnn);
+//            List<HoaDon> listHD = hoaDonService.find();
+//            model.addAttribute("listHoaDon", listHD);
+//            return "ban-hang/hien-thi";
+//        }
         BigDecimal total = BigDecimal.ZERO;
         IMEI imei = imeiService.findById(id);
         HoaDonChiTiet hdct = new HoaDonChiTiet();
@@ -186,6 +197,7 @@ public class BanHangTaiQuayController {
         long millis = System.currentTimeMillis();
         Date date = new java.sql.Date(millis);
         ct.setNgayTao(date);
+        imeiService.updatImei(date, id);
         if (ct.getSoLuong() == 0) {
             ct.setTinhTrang(0);
             chiTietSanPhamService.update1(ct);
@@ -197,7 +209,7 @@ public class BanHangTaiQuayController {
             System.out.println(total);
             model.addAttribute("tong", String.valueOf(total));
             model.addAttribute("listHoaDonChiTiet", list);
-            List<HoaDon> listHD = hoaDonService.findAll();
+            List<HoaDon> listHD = hoaDonService.find();
             model.addAttribute("listHoaDon", listHD);
             model.addAttribute("hoaDon", hoaDonnn);
             return "ban-hang/hien-thi";
@@ -211,7 +223,7 @@ public class BanHangTaiQuayController {
             System.out.println(total);
             model.addAttribute("tong", String.valueOf(total));
             model.addAttribute("listHoaDonChiTiet", list);
-            List<HoaDon> listHD = hoaDonService.findAll();
+            List<HoaDon> listHD = hoaDonService.find();
             model.addAttribute("listHoaDon", listHD);
             model.addAttribute("hoaDon", hoaDonnn);
             return "ban-hang/hien-thi";
@@ -231,6 +243,7 @@ public class BanHangTaiQuayController {
             ct.setTinhTrang(1);
         }
         chiTietSanPhamService.update1(ct);
+        imeiService.updatImei1(date,id);
         hoaDonChiTietService.delete(id);
         BigDecimal total = BigDecimal.ZERO;
         List<HoaDonChiTiet> list = hoaDonChiTietService.getHoaDonChiTiet(hoaDonnn.getId());
@@ -242,13 +255,20 @@ public class BanHangTaiQuayController {
         model.addAttribute("tong", String.valueOf(total));
         model.addAttribute("listHoaDonChiTiet", list);
         model.addAttribute("hoaDon", hoaDonnn);
-        List<HoaDon> listHD = hoaDonService.findAll();
+        List<HoaDon> listHD = hoaDonService.find();
         model.addAttribute("listHoaDon", listHD);
         return "ban-hang/hien-thi";
     }
 
     @PostMapping("/thanh-toan/{id}")
-    public String thanhToan(Model model,@ModelAttribute("hoaDon") HoaDon hoaDon,@PathVariable("id") UUID id){
+    public String thanhToan(Model model, @ModelAttribute("hoaDon") HoaDon hoaDon, @PathVariable("id") UUID id) {
+//        if(hoaDon.getMa().isEmpty()){
+//            model.addAttribute("thongBaoThanhToan","Chưa chọn hóa đơn");
+//            model.addAttribute("hoaDon", hoaDonnn);
+//            List<HoaDon> listHD = hoaDonService.find();
+//            model.addAttribute("listHoaDon", listHD);
+//            return "ban-hang/hien-thi";
+//        }
         HoaDon hd = hoaDonService.findById(id);
         hd.setKhachHang(hoaDon.getKhachHang());
         hd.setDiaChi(hoaDon.getDiaChi());
@@ -264,7 +284,7 @@ public class BanHangTaiQuayController {
         hd.setGhiChu(hoaDon.getGhiChu());
         hd.setTinhTrang(1);
         hoaDonService.thanhToan(hd);
-        imeiService.updatImei(date,id);
-        return "ban-hang/hien-thi";
+        return "redirect:/ban-hang/hien-thi";
     }
+
 }

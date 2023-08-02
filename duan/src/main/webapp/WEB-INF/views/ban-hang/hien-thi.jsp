@@ -20,59 +20,32 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-8">
+        <div class="col-3">
             <div class="outer-border p-3 border border-secondary">
-                <h4 style="text-align: center">Hóa đơn</h4>
-                <table class="table">
-                    <tr>
-                        <form action="/ban-hang/add-hoa-don" method="post">
-                            <button type="submit">Tạo hóa đơn</button>
-                        </form>
-                    </tr>
-                    <thead>
-                    <tr>
-                        <th>STT</th>
-                        <th>Mã hóa đơn</th>
-                        <th>Ngày tạo</th>
-                        <th>Tình trạng</th>
-                        <th>Chức năng</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach items="${listHoaDon}" var="hd" varStatus="i">
-                        <tr>
-                            <td>${i.index+1}</td>
-                            <td>${hd.ma}</td>
-                            <td>${hd.ngayTao}</td>
-                            <td>
-                                <c:if test="${hd.tinhTrang==0}">Chờ Thanh Toán</c:if>
-                                <c:if test="${hd.tinhTrang==1}">Đã Thanh Toán</c:if>
-                            </td>
-                            <td class="btn-group">
-                                <button class="btn btn-info"><a href="/ban-hang/thong-tin-hoa-don/${hd.id}"
-                                                                style="text-decoration: none;color: black">Xem thông
-                                    tin</a></button>
-                                <button class="btn btn-info"><a href="/ban-hang/thay-doi-trang-thai/${hd.id}"
-                                                                style="text-decoration: none;color: black">Thay đổi
-                                    trạng thái</a></button>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
+                <form action="/ban-hang/add-hoa-don" method="post">
+                    <button type="submit"><img src="../img/plus.png"></button>
+                </form>
+                <p style="color: red">${thongBaoHoaDon}</p>
             </div>
-            <hr>
+        </div>
+        <c:forEach items="${listHoaDon}" var="hd" varStatus="i">
+            <div class="col-3">
+                <div class="outer-border p-3 border border-secondary">
+                    <a href="/ban-hang/thong-tin-hoa-don/${hd.id}" class="btn btn-info">${hd.ma}</a></div>
+            </div>
+        </c:forEach>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-8">
             <div class="outer-border p-3 border border-secondary">
                 <h4 style="text-align: center">Thông tin sản phẩm</h4>
                 <table class="table">
                     <tr>
                         <form method="post" action="/ban-hang/search-san-pham">
-                            <th>Tìm kiếm sản phẩm: <input type="text" name="search-san-pham"></th>
+                            <th><input type="text" name="search-san-pham" placeholder="Tìm kiếm sản phẩm"></th>
                             <th>
                                 <button type="submit">Tìm kiếm</button>
-                            </th>
-                            <th>
-
                             </th>
                         </form>
                         <h6 style="text-align: center;color: red">${thongBao}</h6>
@@ -106,9 +79,7 @@
                                 <a href="/ban-hang/them-san-pham/${ctsp.id}"
                                    class="btn btn-info"
                                    data-bs-toggle="modal" data-bs-target="#nhapImei_${ctsp.id}"
-                                >
-                                    Nhập IMEI
-                                </a>
+                                > Nhập IMEI</a>
                                 <div class="modal fade" id="nhapImei_${ctsp.id}" tabindex="-1"
                                      aria-labelledby="exampleModalLabel"
                                      aria-hidden="true" data-backdrop="static">
@@ -116,8 +87,6 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h1 class="modal-title fs-5" id="exampleModalLabel">Danh sách IMEI</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <table class="table">
@@ -136,7 +105,7 @@
                                                     </tr>
                                                 </table>
                                                 <div>
-                                                    <table class="table">
+                                                    <table class="table" id="table_id">
                                                         <thead>
                                                         <tr>
                                                             <th>STT</th>
@@ -145,9 +114,9 @@
                                                             <th>Chức năng</th>
                                                         </tr>
                                                         </thead>
-                                                        <tbody id="listImei_${ctsp.id}" class="imei-search">
+                                                        <tbody id="listImei_${ctsp.id}" class="imei_search">
                                                         </tbody>
-<%--                                                        <tbody id="imei-search"></tbody>--%>
+                                                            <%--                                                        <tbody id="imei_search"></tbody>--%>
                                                     </table>
                                                 </div>
                                             </div>
@@ -239,7 +208,8 @@
                         <div class="form-floating mb-3 mt-3">
                             <form:input class="form-control" path="tongTien" readonly="true" value="${tong}"
                                         id="tienCanThanhToan"/>
-                            <form:label class="form-label" path="tongTien" for="tienCanThanhToan">Tổng tiền:</form:label>
+                            <form:label class="form-label" path="tongTien"
+                                        for="tienCanThanhToan">Tổng tiền:</form:label>
                         </div>
 
                         <div class="form-floating mb-3 mt-3">
@@ -257,7 +227,7 @@
                             <form:label class="form-label" path="ghiChu">Ghi Chú:</form:label>
                         </div>
                         <div class="form-floating mb-3 mt-3">
-                            <form:button type="submit" class="btn btn-primary">Thanh Toán</form:button>
+                            <button type="submit" class="btn btn-primary" onclick="return myFunction4()">Thanh Toán</button>
                         </div>
                     </div>
                 </div>
@@ -307,8 +277,17 @@
         } else {
             return false;
         }
+    }function myFunction4() {
+        let text = "Bạn chắc chắn muốn thanh toán không";
+        let kt = confirm(text);
+        if (kt == true) {
+            confirm("Thanh toán thành công");
+            return true
+        } else {
+            return false;
+        }
     }
-    document.getElementById("tienKhachDua").addEventListener("keyup", function() {
+    document.getElementById("tienKhachDua").addEventListener("keyup", function () {
         tinhTienThua();
     });
 
@@ -319,7 +298,7 @@
 
         var ketQuaElement = document.getElementById("ketQua");
         if (tienThua >= 0) {
-            ketQuaElement.value =  tienThua.toFixed(2);
+            ketQuaElement.value = tienThua.toFixed(2);
         } else {
             ketQuaElement.value = "Khách đưa không đủ tiền.";
         }
@@ -361,7 +340,7 @@
                 <tr>
                     <td>` + (i + 1) + `</td>
                     <td>` + imei.soImei + `</td>
-                    <td>` + imei.tinhTrang + `</td>
+                    <td>` + (imei.tinhTrang == 0 ? "Chưa bán" : "Đã bán") + `</td>
                     <td><a href="/ban-hang/them-imei/` + imei.id + `">Thêm IMEI</a></td>
                 </tr>
                 `;
@@ -376,10 +355,10 @@
 </script>
 <script>
     $('button[id^="searchImei"]').on('click', async function (e) {
-        // const idImei = e.currentTarget.id.split("_")[1];
-        // const ctspId = e.currentTarget.id.split("_")[1];
-        const search=$("#imeiSearchInput").val();
-        const url = "http://localhost:8080/ban-hang/search-imei?search-imei="+search;
+        const btn = $(this);
+        const parentModal = btn.closest('.modal'); // Lấy modal cha gần nhất của nút "Tìm kiếm" được nhấn
+        const search = parentModal.find("#imeiSearchInput").val();
+        const url = "http://localhost:8080/ban-hang/search-imei?search-imei=" + search;
         try {
             const resp = await fetch(url);
             const data = await resp.json();
@@ -388,22 +367,20 @@
             for (let i = 0; i < data.length; i++) {
                 const imei = data[i];
                 const tr = `
-                <tr>
-                    <td>` + (i + 1) + `</td>
-                    <td>` + imei.soImei + `</td>
-                    <td>` + imei.tinhTrang + `</td>
-                    <td><a href="/ban-hang/them-imei/` + imei.id + `">Thêm IMEI</a></td>
-                </tr>
-                `;
+            <tr>
+                <td>` + (i + 1) + `</td>
+                <td>` + imei.soImei + `</td>
+                <td>` + (imei.tinhTrang == 0 ? "Chưa bán" : "Đã bán") + `</td>
+                <td><a href="/ban-hang/them-imei/` + imei.id + `">Thêm IMEI</a></td>
+            </tr>
+            `;
                 html += tr;
             }
-            $(".imei-search").html(html);
+            parentModal.find(".imei_search").html(html);
         } catch (err) {
             console.error(err)
         }
     });
-
-
 </script>
 
 </html>
