@@ -183,7 +183,7 @@ public class ChiTietSanPhamController {
     public String search(Model model, @RequestParam("search") String search) {
         List<ChiTietSanPham> list = chiTietSanPhamService.search(search);
         model.addAttribute("listCTSP", list);
-        return "/chi-tiet-san-pham/index";
+        return "chi-tiet-san-pham/index";
     }
 
     @PostMapping("/loc")
