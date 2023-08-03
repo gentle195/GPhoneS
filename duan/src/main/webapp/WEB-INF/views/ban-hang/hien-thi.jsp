@@ -23,10 +23,9 @@
         <div class="col-3">
             <div class="outer-border p-3 border border-secondary">
                 <form action="/ban-hang/add-hoa-don" method="post">
-                    <button type="submit"><img src="../img/plus.png"></button>
+                    <button type="submit"><img src="/img/plus.png"></button>
                 </form>
-                <p style="color: red">${thongBaoHoaDon}</p>
-            </div>
+            </div><p style="color: red">${thongBaoHoaDon}</p>
         </div>
         <c:forEach items="${listHoaDon}" var="hd" varStatus="i">
             <div class="col-3">
@@ -43,13 +42,111 @@
                 <table class="table">
                     <tr>
                         <form method="post" action="/ban-hang/search-san-pham">
-                            <th><input type="text" name="search-san-pham" placeholder="Tìm kiếm sản phẩm"></th>
-                            <th>
+                            <th><input type="text" name="search-san-pham" placeholder="Tìm kiếm sản phẩm">
                                 <button type="submit">Tìm kiếm</button>
                             </th>
                         </form>
                         <h6 style="text-align: center;color: red">${thongBao}</h6>
                     </tr>
+                </table>
+                <table class="table">
+                    <form action="/ban-hang/loc" method="post"
+                          onsubmit="return checkLoc()">
+                        <tr>
+                            <td style="text-align: center" colspan="1">Hãng Điện Thoại
+                            </td>
+                            <td style="text-align: center" colspan="1">Ram</td>
+                            <td style="text-align: center" colspan="1">Dung Lượng Bộ
+                                Nhớ
+                            </td>
+                            <td style="text-align: center" colspan="1">Dung Lượng Pin
+                            </td>
+                            <td style="text-align: center" colspan="1">Chip</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center" colspan="1">
+                                <select name="hang">
+                                    <option selected disabled>Hãng</option>
+                                    <c:forEach items="${listHang}" var="hang"
+                                               varStatus="i">
+                                        <option value="${hang.id}">${hang.ten}</option>
+                                    </c:forEach>
+                                </select>
+                            </td>
+                            <td style="text-align: center" colspan="1">
+                                <select name="ram">
+                                    <option selected disabled>Ram</option>
+                                    <c:forEach items="${listRam}" var="ram"
+                                               varStatus="i">
+                                        <option value="${ram.id}">${ram.dungLuong}</option>
+                                    </c:forEach>
+                                </select>
+                            </td>
+                            <td style="text-align: center" colspan="1">
+                                <select name="rom">
+                                    <option selected disabled>Rom</option>
+                                    <c:forEach items="${listRom}" var="rom"
+                                               varStatus="i">
+                                        <option value="${rom.id}">${rom.dungLuong}</option>
+                                    </c:forEach>
+                                </select>
+                            </td>
+                            <td style="text-align: center" colspan="1">
+                                <select name="dungLuongPin">
+                                    <option selected disabled>Dung Lượng Pin</option>
+                                    <c:forEach items="${dungLuongPin}" var="pin"
+                                               varStatus="i">
+                                        <option value="${pin.id}">${pin.thongSo}</option>
+                                    </c:forEach>
+                                </select>
+                            </td>
+                            <td style="text-align: center" colspan="1">
+                                <select name="chip">
+                                    <option selected disabled>Chip</option>
+                                    <c:forEach items="${listChip}" var="chip"
+                                               varStatus="i">
+                                        <option value="${chip.id}">${chip.ten}</option>
+                                    </c:forEach>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center" colspan="2">Màn Hình</td>
+                            <td style="text-align: center" colspan="1">Camera</td>
+                            <td style="text-align: center" colspan="1">Giá Bán Min</td>
+                            <td style="text-align: center" colspan="1">Giá bán Max</td>
+                        </tr>
+                        <tr>
+
+                            <td style="text-align: center" colspan="2">
+                                <select name="manHinh">
+                                    <option selected disabled>Màn Hình</option>
+                                    <c:forEach items="${listManHinh}" var="man"
+                                               varStatus="i">
+                                        <option value="${man.id}">${man.thongSo}</option>
+                                    </c:forEach>
+                                </select>
+                            </td>
+                            <td style="text-align: center" colspan="1">
+                                <select name="camera">
+                                    <option selected disabled>Camera</option>
+                                    <c:forEach items="${listCamera}" var="cam"
+                                               varStatus="i">
+                                        <option value="${cam.id}">${cam.thongSo}</option>
+                                    </c:forEach>
+                                </select>
+                            </td>
+                            <td style="text-align: center" colspan="1"><input
+                                    type="number" name="giaBanMin"></td>
+                            <td style="text-align: center" colspan="1"><input
+                                    type="number" name="giaBanMin"></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center" colspan="7">
+                                <button class="btn btn-secondary">Lọc</button>
+                            </td>
+                        </tr>
+                    </form>
                 </table>
                 <table class="table">
                     <thead>
@@ -185,13 +282,20 @@
                             </form:select>
                             <form:label class="form-label" path="nhanVien">Nhân Viên:</form:label>
                         </div>
-
-                        <div class="form-floating mb-3 mt-3">
-                            <form:select path="khachHang" class="form-control">
-                                <form:options items="${listKhachHang}" itemLabel="hoTen" itemValue="id"/>
-                            </form:select>
-                            <form:label class="form-label" path="khachHang">Khách Hàng:</form:label>
+                        <div class="row">
+                            <div class="form-floating mb-3 mt-3 col-8">
+                                <form:select path="khachHang" class="form-control">
+                                    <form:options items="${listKhachHang}" itemLabel="hoTen" itemValue="id"/>
+                                </form:select>
+                                <form:label class="form-label" path="khachHang">Khách Hàng:</form:label>
+                            </div>
+                            <div class="form-floating mb-3 mt-3 col-4">
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    Thêm khách hàng
+                                </button>
+                            </div>
                         </div>
+
 
                         <div class="form-floating mb-3 mt-3">
                             <form:select path="diaChi" class="form-control">
@@ -227,7 +331,8 @@
                             <form:label class="form-label" path="ghiChu">Ghi Chú:</form:label>
                         </div>
                         <div class="form-floating mb-3 mt-3">
-                            <button type="submit" class="btn btn-primary" onclick="return myFunction4()">Thanh Toán</button>
+                            <button type="submit" class="btn btn-primary" onclick="return myFunction4()">Thanh Toán
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -277,7 +382,9 @@
         } else {
             return false;
         }
-    }function myFunction4() {
+    }
+
+    function myFunction4() {
         let text = "Bạn chắc chắn muốn thanh toán không";
         let kt = confirm(text);
         if (kt == true) {
@@ -287,6 +394,7 @@
             return false;
         }
     }
+
     document.getElementById("tienKhachDua").addEventListener("keyup", function () {
         tinhTienThua();
     });
