@@ -130,7 +130,13 @@ public class ChiTietSanPhamController {
     }
 
     @GetMapping("/view-update/{id}")
-    public String viewupdate(Model model, @PathVariable("id") UUID id, @ModelAttribute("chitietsanphamupdate") ChiTietSanPham chiTietSanPham) {
+    public String viewupdate(Model model, @PathVariable("id") UUID id, @ModelAttribute("chitietsanphamupdate") ChiTietSanPham chiTietSanPham,
+                             @ModelAttribute(name = "Pin") Pin pin,
+                             @ModelAttribute(name = "chip") Chip chip,
+                             @ModelAttribute(name = "ram")Ram ram,
+                             @ModelAttribute(name = "mauSac") MauSac mauSac,
+                             @ModelAttribute(name = "rom")Rom rom,
+                             @ModelAttribute(name = "sanPham") SanPham sanPham) {
         model.addAttribute("listSanPham", sanPhamService.findAll());
         model.addAttribute("listMauSac", mauSacService.findAll());
         model.addAttribute("listChip", chipService.findAll());
