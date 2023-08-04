@@ -25,7 +25,8 @@
                 <form action="/ban-hang/add-hoa-don" method="post">
                     <button type="submit"><img src="/img/plus.png"></button>
                 </form>
-            </div><p style="color: red">${thongBaoHoaDon}</p>
+            </div>
+            <p style="color: red">${thongBaoHoaDon}</p>
         </div>
         <c:forEach items="${listHoaDon}" var="hd" varStatus="i">
             <div class="col-3">
@@ -290,9 +291,66 @@
                                 <form:label class="form-label" path="khachHang">Khách Hàng:</form:label>
                             </div>
                             <div class="form-floating mb-3 mt-3 col-4">
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#newKhachHang">
                                     Thêm khách hàng
                                 </button>
+                            </div>
+                            <div class="modal fade" id="newKhachHang" tabindex="-1" aria-labelledby="khachHangLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog col-md-2 ms-auto">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        </div>
+                                        <div class="modal-body modal-dialog-centered">
+                                            <form:form modelAttribute="modalAddKhachHang" action="/ban-hang/add-khach-hang" method="post">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-floating mb-3 mt-3">
+                                                            <form:input class="form-control" placeholder="" path="hoTen"/>
+                                                            <form:label class="form-label" path="hoTen">Họ Tên Khách Hàng:</form:label>
+                                                            <form:errors path="urlAnh" cssStyle="color: red"></form:errors>
+                                                        </div>
+                                                        <div class="form-floating mb-3 mt-3">
+                                                            <form:radiobutton class="form-control" path="gioiTinh" value="true" label="Nam" checked="true"/>
+                                                            <form:radiobutton class="form-control" path="gioiTinh" value="false" label="Nữ"/>
+                                                            <form:label class="form-label" path="gioiTinh">Giới Tính:</form:label>
+                                                        </div>
+                                                        <div class="form-floating mb-3 mt-3">
+                                                            <form:input class="form-control" placeholder="" path="email"/>
+                                                            <form:label class="form-label" path="email">Email:</form:label>
+                                                            <form:errors path="urlAnh" cssStyle="color: red"></form:errors>
+                                                        </div>
+                                                        <div class="form-floating mb-3 mt-3">
+                                                            <form:input class="form-control" placeholder="" path="sdt"/>
+                                                            <form:label class="form-label" path="sdt">SĐT:</form:label>
+                                                            <form:errors path="urlAnh" cssStyle="color: red"></form:errors>
+                                                        </div>
+                                                        <div class="form-floating mb-3 mt-3">
+                                                            <form:input class="form-control" placeholder="" path="hoTen"/>
+                                                            <form:label class="form-label" path="hoTen">Họ Tên Khách Hàng:</form:label>
+                                                            <form:errors path="urlAnh" cssStyle="color: red"></form:errors>
+                                                        </div>
+                                                        <div class="form-floating mb-3 mt-3">
+                                                            <form:input class="form-control" placeholder="" path="taiKhoan"/>
+                                                            <form:label class="form-label" path="taiKhoan">Họ Tên Khách Hàng:</form:label>
+                                                            <form:errors path="urlAnh" cssStyle="color: red"></form:errors>
+                                                        </div>
+                                                        <div class="form-floating mb-3 mt-3">
+                                                            <form:input class="form-control" placeholder="" path="matKhau"/>
+                                                            <form:label class="form-label" path="matKhau">Họ Tên Khách Hàng:</form:label>
+                                                            <form:errors path="urlAnh" cssStyle="color: red"></form:errors>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form:form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Close
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
