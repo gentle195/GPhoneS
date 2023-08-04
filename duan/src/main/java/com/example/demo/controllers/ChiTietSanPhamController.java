@@ -41,7 +41,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/chi-tiet-san-pham")
 public class ChiTietSanPhamController {
     @Autowired
     ChiTietSanPhamService chiTietSanPhamService;
@@ -68,7 +67,7 @@ public class ChiTietSanPhamController {
 
     private Date ngay;
 
-    @GetMapping("/hien-thi")
+    @GetMapping("/chi-tiet-sp")
     public String hienThi(Model model, @RequestParam("pageNum") Optional<Integer> pageNum) {
         Pageable pageable = PageRequest.of(pageNum.orElse(0), 5);
         Page<ChiTietSanPham> chiTietSanPhamPage = chiTietSanPhamService.getAll(pageable);
@@ -84,7 +83,7 @@ public class ChiTietSanPhamController {
         model.addAttribute("dungLuongPin", dungLuongPinService.findAll());
         model.addAttribute("listManHinh", manHinhService.findAll());
         model.addAttribute("listCamera", cameraService.findAll());
-        return "chi-tiet-san-pham/index";
+        return "production/tables_dynamic";
     }
 
     @GetMapping("/add")
@@ -130,13 +129,7 @@ public class ChiTietSanPhamController {
     }
 
     @GetMapping("/view-update/{id}")
-    public String viewupdate(Model model, @PathVariable("id") UUID id, @ModelAttribute("chitietsanphamupdate") ChiTietSanPham chiTietSanPham,
-                             @ModelAttribute(name = "Pin") Pin pin,
-                             @ModelAttribute(name = "chip") Chip chip,
-                             @ModelAttribute(name = "ram")Ram ram,
-                             @ModelAttribute(name = "mauSac") MauSac mauSac,
-                             @ModelAttribute(name = "rom")Rom rom,
-                             @ModelAttribute(name = "sanPham") SanPham sanPham) {
+    public String viewupdate(Model model, @PathVariable("id") UUID id, @ModelAttribute("chitietsanphamupdate") ChiTietSanPham chiTietSanPham) {
         model.addAttribute("listSanPham", sanPhamService.findAll());
         model.addAttribute("listMauSac", mauSacService.findAll());
         model.addAttribute("listChip", chipService.findAll());
