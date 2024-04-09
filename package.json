@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "startv2":"node --experimental-modules --es-module-specifier-resolution=node ./src/app.js",
-    "start":"node ./src/app.js"
+    "start":"node app.js"
   },
   "keywords": [],
   "author": "",
